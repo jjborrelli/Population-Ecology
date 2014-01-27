@@ -1,0 +1,22 @@
+Population Ecology
+========================================================
+
+
+```{r}
+N.t = 30
+R = 1.16
+
+N.t1 <- N.t * R
+```
+
+You can also embed plots, for example:
+
+```{r fig.width=7, fig.height=6}
+N <- c()
+for(i in 1:10){
+  N[i] <- N.t * R ^ i
+}
+
+plot(N)
+```
+
