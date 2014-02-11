@@ -1,11 +1,11 @@
 Population Ecology
 ========================================================
 ```{r setglobalopts, echo = F}
-opts_chunk$set(comment = NA)
+opts_chunk$set(comment = NA, fig.width=7, fig.height=6)
 ```
 
 
-```{r}
+```{r simpleEQ}
 N.t = 30
 R = 1.16
 
@@ -13,9 +13,9 @@ N.t1 <- N.t * R
 N.t1
 ```
 
-You can also embed plots, for example:
+We can use this equation for multiple years and plot the result: 
 
-```{r fig.width=7, fig.height=6}
+```{r ExpGrowth}
 N <- c()
 for(i in 1:10){
   N[i] <- N.t * R ^ i
@@ -74,14 +74,14 @@ require(ggplot2)
 
 Plot using Growth Rate  
 
-```{r fig.width=7, fig.height=6}
+```{r}
 qplot(x = Table_1.3$Year[2:13], y = Table_1.3$Growth.Rate[2:13], 
       xlab = "Year", ylab = "Growth Rate")
 ```
   
 Plot using the Annual Growth Rate  
 
-```{r fig.width = 7, fig.height = 6}
+```{r}
 qplot(x = Table_1.3$Year[2:13], y = Table_1.3$Annual.Growth.Rate[2:13], 
       xlab = "Year", ylab = "Annual Growth Rate")
 ```

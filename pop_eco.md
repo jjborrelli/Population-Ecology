@@ -18,7 +18,7 @@ N.t1
 ```
 
 
-You can also embed plots, for example:
+We can use this equation for multiple years and plot the result: 
 
 
 ```r
@@ -30,7 +30,7 @@ for (i in 1:10) {
 plot(N)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
+![plot of chunk ExpGrowth](figure/ExpGrowth.png) 
 
 
 
@@ -134,7 +134,7 @@ qplot(x = Table_1.3$Year[2:13], y = Table_1.3$Growth.Rate[2:13], xlab = "Year",
     ylab = "Growth Rate")
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
   
 Plot using the Annual Growth Rate  
@@ -145,7 +145,7 @@ qplot(x = Table_1.3$Year[2:13], y = Table_1.3$Annual.Growth.Rate[2:13], xlab = "
     ylab = "Annual Growth Rate")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
 
 Compare the change in annual growth rate with the absolute increase in number of people
