@@ -7,7 +7,8 @@ lvmod <- function(times, state, parms){
   })
 }
 
-
+c(10, 20) %*% matrix(c(.1, -.05, .2, -.2), 2, 2)
+c(.1, .2) %*% matrix(c(10, 20, 30, 40), 2, 2)
 
 parms <- list(alpha = c(1.5, 1), m = matrix(c(-1, .2, -.3, -1), 2, 2))
 
