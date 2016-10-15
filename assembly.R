@@ -77,32 +77,73 @@ n.mat <- function(nv){
 
 cond <- FALSE
 while(!cond){
-  nva <- n.vals(100, .15)
+  nva <- n.vals(10, .15)
   nm1 <- n.mat(nva)
   
   cond <- is.connected(graph.adjacency(nm1))
 }
+nva2 <- n.vals(100, .1)
+nva3 <- n.vals(100, .2)
+
 
 tind <- TrophInd(nm1)
-xi <- (((10^2)^tind$TL)/100)^-0.25*0.314
+metsca <- runif(10, .2, .3)
+xi <- (((10^2)^tind$TL)/100)^-.25*0.314
 ri <- as.numeric(colSums(nm1) == 0)
 
-spp1 <- 1:100
-par <- list(K = 1, x.i = xi[spp1], yij = 8, eij = 0.85, xpar = 0.2, 
+spp1 <- 1:10
+par <- list(K = 1, x.i = xi[spp1], yij = 8, eij = 0.85, xpar = .2, 
             B.o = 0.5, r.i = ri[spp1], A = nm1[spp1, spp1], G.i = Gi, FR = Fij)
 
-out1 <- ode(y = runif(100, .1, 1), times = 1:2000, func = CRmod, parms = par, 
-            events = list(func = ext1, time = 1:2000))
+out1 <- ode(y = runif(10, .1, 1), times = 1:1000, func = CRmod, parms = par, 
+            events = list(func = ext1, time = 1:1000))
 matplot(out1[,-1], typ = "l")
-matplot(out1[1900:2000,-1], typ = "l")
-sd(out1[1800:2000,-1])/mean(out1[1800:2000,-1])
+matplot(out1[900:1000,-1], typ = "l")
+sd(out1[800:1000,-1])/mean(out1[800:1000,-1])
 
-cv1 <- apply(out1[,-1], 2, function(x) sd(x[1800:2000])/mean(x[1800:2000]))
+cv1 <- apply(out1[,-1], 2, function(x) sd(x[800:1000])/mean(x[800:1000]))
 cv1[is.nan(cv1)] <- 0
 
 plot(cv1~tind$TL)
-tind2 <- TrophInd(nm1[out1[2000,-1] > 0, out1[2000,-1] > 0])
-plot(log(cv1[out1[2000,-1] > 0])~tind2$TL)
+tind2 <- TrophInd(nm1[out1[1000,-1] > 0, out1[1000,-1] > 0])
+plot((cv1[out1[1000,-1] > 0])~tind2$TL)
+plot(cv1~metsca)
 
 
-mot1 <- getmot(graph.adjacency(nm1))
+#mot1 <- getmot(graph.adjacency(nm1))
+
+
+
+par <- list(K = 1, x.i = xi, yij = 8, eij = 0.85, xpar = 0.2, 
+            B.o = 0.5, r.i = ri, A = nm1, G.i = Gi, FR = Fij)
+
+nm2 <- nm1[out1[1000,-1] > 0,out1[1000,-1] > 0]
+ri <- as.numeric(colSums(nm1) == 0)
+#nm2 <-nm1
+out2 <- lapply(1:10, function(x) matrix(0, nrow = 2000, ncol = 100))
+for(i in 1:10){
+  newrow <- rbinom(ncol(nm2)+1, 1, .2)
+  newrow[ri == 1] <- 0
+  nm2 <- rbind(cbind(nm2, rbinom(nrow(nm2), 1, .2)), newrow)
+  tind <- TrophInd(nm2)
+  
+  xi <- (((10^2)^tind$TL)/100)^-.25*0.314
+  ri <- as.numeric(colSums(nm2) == 0)
+  
+  par <- list(K = 1, x.i = xi, yij = 8, eij = 0.85, xpar = 0.2, 
+              B.o = 0.5, r.i = ri, A = nm2, G.i = Gi, FR = Fij)
+  
+  if(i == 1){states1 <- c(out1[1000,-1][out1[1000,-1] > 0], .1)}else{states1 <- c(out2[[i-1]][2000,-1], .1)}
+  res <- ode(y = states1, times = 1:2000, func = CRmod, parms = par, 
+              events = list(func = ext1, time = 1:2000))
+  out2[[i]][,1:ncol(nm2)] <- res[,2:ncol(res)]
+  print(i)
+}
+
+out2[[20]][1000,-1]
+
+plot(graph.adjacency(nm2[out2[[20]][1000,-1]>0,out2[[20]][1000,-1]>0]))
+
+sapply(out2, function(x) sum(x[1000,-1]>0))
+
+matplot(out2[[20]][,-1], typ = "l")
